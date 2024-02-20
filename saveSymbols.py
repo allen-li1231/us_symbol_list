@@ -4,17 +4,19 @@ Author: asad70
 -------------------------------------------------------------------
 ****************************************************************************'''
 import requests
-from requests import get
 from bs4 import BeautifulSoup
+from io import StringIO
+import pandas as pd
 
-def saveSym(exchange, outputFile):
+
+def saveSym(exchange, outputFile=None):
 	exchanges = {
 	"nasdaq": "https://www.advfn.com/nasdaq/nasdaq.asp?companies={letter}",	
 	"nyse": "https://www.advfn.com/nyse/newyorkstockexchange.asp?companies={letter}",
 	"amex": "https://www.advfn.com/amex/americanstockexchange.asp?companies={letter}"}
 
 	url = exchanges[exchange.lower()]
-	file = open(outputFile, 'w', encoding="utf-8")
+	file = StringIO() if outputFile is None else open(outputFile, 'w', encoding="utf-8")
 	
 	# advfn web structures each symbol by letter
 	letters = "ABCDEFGHIJKLMNOPQUSTUVWXYZ+"
@@ -33,9 +35,14 @@ def saveSym(exchange, outputFile):
 				file.write("\n")
 		print(f"Finished letter {letter} for {exchange}")
 	file.close()
-	print(f"Finished extracting data for {exchange}. Data saved in {outputFile}")
 	
+	if outputFile is None:
+		return pd.read_csv(file, sep=',')
 
-saveSym("nasdaq", "nasdaqsym.txt")
-saveSym("amex", "amexsym.txt")
-saveSym("nyse", "nysesym.txt")
+	print(f"Finished extracting data for {exchange}. Data saved in {outputFile}")
+
+
+if __name__ == '__main__':
+	saveSym("nasdaq", "nasdaqsym.txt")
+	saveSym("amex", "amexsym.txt")
+	saveSym("nyse", "nysesym.txt")
