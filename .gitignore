@@ -1,0 +1,8 @@
+.ipynb_checkpoints/
+__pycache__/
+
+*.pyc
+
+amexsym.csv
+nasdaqsym.csv
+nysesym.csv
