@@ -31,7 +31,7 @@ def saveSym(exchange, outputFile=None):
 
 	# advfn web structures each symbol by letter
 	letters = "ABCDEFGHIJKLMNOPQUSTUVWXYZ+"
-	for letter in tqdm(letters):
+	for letter in tqdm(letters, desc=f"fetching {exchange}"):
 		request_data = session.get(url.format(letter = letter))
 		request_html = request_data.text
 		soup = BeautifulSoup(request_html, 'html.parser')
